@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 from PIL import Image
 import pytesseract
 
@@ -9,6 +10,13 @@ import pytesseract
 # Set input and output directories
 input_dir = "/media/jimmychestnut/bastion/data/raw/Documents/Official Records/Army/Army Personnel File$"
 output_base = "/media/jimmychestnut/bastion/data/processed"
+
+# Configure logging
+logging.basicConfig(
+    filename='ocr_processing.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 # Function to process all .tif files recursively
 def process_tif_files(input_dir, output_base):
@@ -47,9 +55,9 @@ def process_tif_files(input_dir, output_base):
                     with open(output_path, "w", encoding="utf-8") as json_file:
                         json.dump(output_data, json_file, indent=4)
 
-                    print(f"Processed: {input_path} -> {output_path}")
+                    logging.info(f"Processed: {input_path} -> {output_path}")
                 except Exception as e:
-                    print(f"Error processing {input_path}: {e}")
+                    logging.error(f"Error processing {input_path}: {e}")
 
 # Run the OCR processing
 process_tif_files(input_dir, output_base)
